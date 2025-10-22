@@ -184,108 +184,107 @@
   <h1>Tower of Hanoi Visualization</h1>
   
   <div class="tower-of-hanoi-container">
-    <div class="visualization-area">
-      {#each [0, 1, 2] as rodIndex}
-        <div class="rod" class:position={getPosition(rodIndex)}>
-          <div class="rod-pole"></div>
-          <div class="rod-base"></div>
-          <div class="disks-container">
-            {#each rods[rodIndex] as disk, diskIndex}
-              <div 
-                class="disk"
-                style={`background-color: ${getColor(disk.size, disks)}; width: ${disk.size * 20}px;`}
-              >
-                <span class="disk-label">{disk.size}</span>
-              </div>
-            {/each}
+    <div class="layout-container">
+      <div class="visualization-area">
+        {#each [0, 1, 2] as rodIndex}
+          <div class="rod" class:position={getPosition(rodIndex)}>
+            <div class="rod-pole"></div>
+            <div class="rod-base"></div>
+            <div class="disks-container">
+              {#each rods[rodIndex] as disk, diskIndex}
+                <div 
+                  class="disk"
+                  style={`background-color: ${getColor(disk.size, disks)}; width: ${40 + (disk.size - 1) * 12}px;`}
+                >
+                  <span class="disk-label">{disk.size}</span>
+                </div>
+              {/each}
+            </div>
           </div>
-        </div>
-      {/each}
-    </div>
-    
-    <div class="controls-area">
-      <div class="controls">
-        <div class="control-group">
-          <label for="disk-count">Number of Disks: {disks}</label>
-          <input 
-            id="disk-count"
-            type="range" 
-            min="3" 
-            max="10" 
-            bind:value={disks}
-            on:change={() => initializeGame(disks)}
-          />
-        </div>
-        
-        <div class="control-group">
-          <label for="speed">Speed:</label>
-          <select id="speed" on:change={handleSpeedChange}>
-            {#each speedOptions as option}
-              <option value={option.value} selected={option.value === speed}>
-                {option.label}
-              </option>
-            {/each}
-          </select>
-        </div>
-        
-        <div class="control-group buttons">
-          <button 
-            class="btn" 
-            class:playing={isPlaying}
-            on:click={isPlaying ? stopAnimation : startAnimation}
-          >
-            {isPlaying ? 'Pause' : 'Play'}
-          </button>
-          
-          <button 
-            class="btn" 
-            class:disabled={currentMoveIndex <= 0}
-            disabled={currentMoveIndex <= 0}
-            on:click={stepBackward}
-          >
-            ← Step Back
-          </button>
-          
-          <button 
-            class="btn" 
-            class:disabled={currentMoveIndex >= totalMoves}
-            disabled={currentMoveIndex >= totalMoves}
-            on:click={stepForward}
-          >
-            Step Forward →
-          </button>
-          
-          <button class="btn" on:click={resetGame}>Reset</button>
-        </div>
+        {/each}
       </div>
       
-      <div class="stats">
-        <div class="stat-item">
-          <h3>Current Step</h3>
-          <p>{currentMoveIndex} / {totalMoves}</p>
-        </div>
-        
-        <div class="stat-item">
-          <h3>Disks</h3>
-          <p>{disks}</p>
-        </div>
-        
-        <div class="stat-item">
-          <h3>Algorithm Complexity</h3>
-          <p>{complexity}</p>
-        </div>
-        
-        <div class="stat-item">
-          <h3>Time Elapsed</h3>
-          <p>{formattedTime}</p>
-        </div>
-        
-        <div class="stat-item">
-          <h3>Progress</h3>
-          <div class="progress-bar">
-            <div class="progress" style={`width: ${progress}%`}></div>
+      <div class="controls-and-stats">
+        <div class="controls">
+          <div class="control-group">
+            <label for="disk-count">Number of Disks: {disks}</label>
+            <input 
+              id="disk-count"
+              type="range" 
+              min="3" 
+              max="10" 
+              bind:value={disks}
+              on:change={() => initializeGame(disks)}
+            />
           </div>
-          <p>{progress}%</p>
+          
+          <div class="control-group">
+            <label for="speed">Speed:</label>
+            <select id="speed" on:change={handleSpeedChange}>
+              {#each speedOptions as option}
+                <option value={option.value} selected={option.value === speed}>
+                  {option.label}
+                </option>
+              {/each}
+            </select>
+          </div>
+          
+          <div class="control-group buttons">
+            <button 
+              class="btn btn-control" 
+              class:playing={isPlaying}
+              on:click={isPlaying ? stopAnimation : startAnimation}
+            >
+              {isPlaying ? 'Pause' : 'Play'}
+            </button>
+            
+            <button 
+              class="btn btn-control" 
+              class:disabled={currentMoveIndex <= 0}
+              disabled={currentMoveIndex <= 0}
+              on:click={stepBackward}
+            >
+              ← Step
+            </button>
+            
+            <button 
+              class="btn btn-control" 
+              class:disabled={currentMoveIndex >= totalMoves}
+              disabled={currentMoveIndex >= totalMoves}
+              on:click={stepForward}
+            >
+              Step →
+            </button>
+            
+            <button class="btn btn-control" on:click={resetGame}>Reset</button>
+          </div>
+        </div>
+        
+        <div class="stats">
+          <div class="stat-item">
+            <h3>Current Step</h3>
+            <p>{currentMoveIndex} / {totalMoves}</p>
+          </div>
+          
+          <div class="stat-item">
+            <h3>Disks</h3>
+            <p>{disks}</p>
+          </div>
+          
+          <div class="stat-item">
+            <h3>Algorithm Complexity</h3>
+            <p>{complexity}</p>
+          </div>
+          
+
+          
+          <div class="stat-item">
+            <h3>Progress</h3>
+            <div class="progress-bar">
+              <div class="progress" style={`width: ${progress}%`}></div>
+            </div>
+            <p>{progress}%</p>
+          </div>
         </div>
       </div>
     </div>
@@ -335,11 +334,14 @@
   }
 
   .tower-of-hanoi-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     padding: 1rem;
     min-height: 100vh;
+  }
+  
+  .layout-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
   
   .visualization-area {
@@ -349,19 +351,37 @@
     height: 60vh;
     width: 100%;
     padding: 2rem 0;
-    border-bottom: 2px solid var(--border-color);
-    background: linear-gradient(to bottom, #e0f7fa, #ffffff);
+    border: 2px solid var(--border-color);
     border-radius: 8px;
+    background: linear-gradient(to bottom, #e0f7fa, #ffffff);
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   }
   
-  .controls-area {
+  .controls-and-stats {
     width: 100%;
-    max-width: 800px;
-    margin: 2rem auto;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    padding: 1.5rem;
+    background-color: #e8f4fd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
 
   /* Rod styling */
@@ -393,7 +413,7 @@
 
   .disks-container {
     position: absolute;
-    bottom: 25px;
+    bottom: 28px;
     width: 100%;
     display: flex;
     flex-direction: column-reverse;
@@ -407,12 +427,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     transition: transform 0.3s ease, left 0.3s ease;
     position: relative;
     z-index: 1;
-    min-width: 40px;
+    min-width: 35px;
   }
 
   .disk-label {
@@ -462,7 +482,8 @@
 
   .buttons {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
+    flex-wrap: nowrap;
     gap: 0.5rem;
     justify-content: center;
     width: 100%;
@@ -477,9 +498,11 @@
     color: white;
     font-weight: bold;
     transition: all 0.3s;
+    min-width: 90px;
+  }
+  
+  .btn-control {
     flex: 1;
-    min-width: 100px;
-    max-width: 120px;
   }
 
   .btn:hover:not(.disabled) {
@@ -550,8 +573,45 @@
     transition: width 0.3s ease;
   }
 
-  /* Responsive design */
-  @media (max-width: 768px) {
+  /* Landscape layout - when screen is wide (desktop/laptop) */
+  @media (min-width: 1024px) {
+    .layout-container {
+      flex-direction: row;
+      height: 80vh;
+    }
+    
+    .visualization-area {
+      width: 60%;
+      height: 100%;
+      border-right: 2px solid var(--border-color);
+      border-bottom: none;
+      border-radius: 8px 0 0 8px;
+    }
+    
+    .controls-and-stats {
+      width: 40%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .controls {
+      width: 100%;
+      height: auto;
+      border-radius: 0 8px 0 0;
+    }
+    
+    .stats {
+      width: 100%;
+      height: auto;
+      border-radius: 0 0 8px 0;
+      margin-top: auto;
+    }
+  }
+
+  /* Portrait layout - when screen is narrow (mobile/tablet) */
+  @media (max-width: 1023px) {
     .tower-of-hanoi-container {
       padding: 0.5rem;
     }
